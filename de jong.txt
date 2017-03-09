@@ -1,0 +1,178 @@
+
+from math import sin, cos
+
+
+
+from PIL import Image
+
+import pygame, sys, os
+
+from pygame.locals import QUIT, KEYDOWN, K_ESCAPE
+
+
+
+
+
+class Attractor():
+
+    '''
+
+    Class for Attractor functions and methods
+
+    '''
+
+
+
+    def __init__( self, constants = {"a":-0.89, "b": 1.59, "c":1.85, "d": 2.19} ):
+
+        '''
+
+        Constructor
+
+        '''
+
+
+
+        #  Useful Constants
+
+        os.environ['SDL_VIDEO_CENTERED'] = '1'    #  Center Screen the Window
+
+
+
+        pygame.init()
+
+        self.size = self.width, self.height = ( 1024, 640 )
+
+        self.screen = pygame.display.set_mode( self.size, 0, 32 )
+
+        pygame.display.set_caption( "Peter D. Jong Attractor" )
+
+
+
+        #  Colors
+
+        self.bg = ( 248, 248, 248 )
+
+        self.textshade = ( 48, 48, 48 )
+
+        self.grayshade = ( 144, 144, 144 )
+
+
+
+        self.constants = constants
+
+        self.no_of_ite = 50000;
+
+        self.xn, self.yn = 1, 1
+
+        self.coords = []
+
+        self.screen.fill( self.bg )
+
+        self.count = 0
+
+        self.str_values = "a =" + str( self.constants["a"] ) + ", b = " + str( self.constants["b"] ) + ", c = " \
+
+                            + str( self.constants["c"] ) + ", d = " + str( self.constants["d"] )
+
+
+
+        #  Different Font Objects
+
+        self.font_obj = pygame.font.Font( "lunchds.ttf", 22 )
+
+        self.font_obj2 = pygame.font.Font( "retganon.ttf", 24 )
+
+
+
+        self.text_surf_obj1 = self.font_obj.render( "Peter D. Jong Attractor", True, self.textshade, None )
+
+        self.text_rect_obj1 = self.text_surf_obj1.get_rect()
+
+        self.text_rect_obj1.center = 200, 40
+
+
+
+        self.text_surf_obj2 = self.font_obj2.render( self.str_values , True, self.textshade, None )
+
+        self.text_rect_obj2 = self.text_surf_obj2.get_rect()
+
+        self.text_rect_obj2.center = self.width // 2 + 60, self.height - 25
+
+
+
+        self.screen.blit( self.text_surf_obj1, self.text_rect_obj1 )
+
+        self.screen.blit( self.text_surf_obj2, self.text_rect_obj2 )
+
+
+
+        self.game_loop()
+
+
+
+    def game_loop( self ):
+
+        while True:
+
+            for evt in pygame.event.get():
+
+                if evt.type == QUIT or ( evt.type == KEYDOWN and evt.key == K_ESCAPE ):
+
+                    pygame.quit()
+
+                    sys.exit()
+
+
+
+            if self.count > self.no_of_ite:
+
+                self.save_surface( "pdf1.png" )
+
+                sys.exit()
+
+            else:
+
+                for i in range( 10000 ):
+
+                    self.xn, self.yn = ( sin( self.constants["a"] * self.yn ) - cos ( self.constants["b"] \
+
+                                    * self.xn ) ), ( sin( self.constants["c"] * self.xn ) - cos( self.constants["d"] * self.yn ) )
+
+                    #  xn, yn = ( d * sin( a * xn ) - sin ( b * yn ) ), ( c * cos( a * xn ) + cos( b * yn ) )
+
+                    self.coords.append( ( self.xn, self.yn ) )
+
+                    pygame.draw.circle( self.screen, self.grayshade , ( self.width // 2 + \
+
+                                            int( 120 * self.xn ), self.height // 2 + int( 120 * self.yn ) ), 1, 1 )
+
+                    self.count += 1
+
+
+
+            pygame.display.update()
+
+
+
+    def save_surface( self, filename ):
+
+        if filename != None:
+
+            data = pygame.image.tostring( self.screen, 'RGBA' )
+
+            img = Image.fromstring( 'RGBA', self.size, data )
+
+            pygame.image.save( self.screen, filename )
+
+        else:
+
+            raise ValueError( "The filename is not given." )
+
+
+
+
+
+if __name__ == "__main__":
+
+    ins = Attractor()
