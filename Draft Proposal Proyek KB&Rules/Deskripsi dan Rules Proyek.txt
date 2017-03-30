@@ -1,0 +1,22 @@
+Kejar-kejaran
+
+Game ini mengambarkan  permainan kejar-kejaran yang biasa anak-anak lakukan saat masih kecil
+.
+Mekanisme permainan ini adalah ada beberapa player (dot merah) sebagai pengejar dan ada banyak player (dot biru)
+sebagai yang dikejar. Tujuan dari permainan ini:
+
+-Team Merah: Mengalahkan tim biru dengan menyentuh tim biru hingga tidak ada yang tersisa
+
+-Team Biru: Bertahan dari serangan tim merah hingga waktu yang ditentukan.
+
+RULES:
+ 
+- adanya batas area untuk kedua pemain
+
+- batas round 3
+
+- point untuk menang 2x
+
+- waktu 10 menit
+
+- jumlah pemain tim merah 5 dan biru 10
